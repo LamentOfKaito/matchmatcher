@@ -8,81 +8,32 @@
 - https://mongoplayground.net
 #interesting #mongodb
 
+- https://github.com/crcn/sift.js
+"Use Mongodb queries in JavaScript"
+#interesting
+
+
+## Data organization
+There are 3 data stores:
+- **MatchSpec**
+- **LightMatches**
+- **LightDataDragon**
+```ts
+interface ILightData {
+
+    champions: {
+        name: string,
+        id: number,
+    }[],
+
+    items: {
+        name: string,
+        id: number,
+    }[]
+
+}
+```
+
 ---
 
-Axios
-```js
-/**
- * @returns Size of the resource in bytes (content-length).
- */
-async function getSize(url) {
-    return await axios
-        .head(url)
-        .then(res => res.headers['content-length'])
-        .then(Number);
-}
-
-function prettyFilesize(bytes) {
-    throw unimplemented exception
-}
-
-const lightDataUrl = './data.light.json';
-document.onload = () => {
-    size = await getSize(lightDataUrl)
-    store.set(size)
-} 
-
-const sizeText = dataSize ? prettyFilesize(size) | 'unknown size';
-<ButtonTimed timeout=5 action={fetchFile}>
-    Load all data
-    ({sizeText})
-<ButtonTimed>
-```
-
-```js
-const sUrl = 'https://jsonplaceholder.typicode.com/todos/'
-
-await axios({
-    url: sUrl,
-    method: "GET",
-    responseType: "blob", // important
-    onDownloadProgress: (progressEvent) => {
-        let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total); // you can use this to show user percentage of file downloaded
-        console.log({percentCompleted, progressEvent})
-    }
-})
-```
-
-```java
-public class RiotService {
-    public Iterator<Match> pullAllMatches(Summoner summoner) {
-        return null;
-    }
-
-}
-```
-
-```js
-function sameTeam(specA, specB) {
-    const {participants} = this;
-    
-    identifyingProps(specA)
-    identifyingProps(specB)
-    if either of these is empty, return true; // assumption
-
-    participants.find()
-    participants.find()
-    return playerA.teamId === playerB.teamId
-}
-
-function identifyingProps(spec) {
-    const UNIQUE_PROPS = [
-        // not 'role'
-        'championName',
-        'summonerName'
-    ]
-
-    return spec.keys.in UNIQUE_PROPS and not null
-    
-}
-```
+END.

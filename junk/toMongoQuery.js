@@ -1,5 +1,5 @@
 /**
- * MongoDB Query
+ * Create MongoDB Query
  *
  * @todo Create sameTeam predicate
  * @todo Create isTeam predicate
@@ -8,7 +8,7 @@
  * @param {MatchSpecData} matchSpecData
  * @returns {object} Mongo query
  */
-function toQuery(matchSpecData) {
+function toMongoQuery(matchSpecData) {
     const finalQuery = 
     {
         $and: participants.map(participantPartialQuery)
