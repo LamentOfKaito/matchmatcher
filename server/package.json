@@ -13,6 +13,7 @@
   "dependencies": {
     "@fightmegg/riot-api": "^0.0.8",
     "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "mongodb": "^5.1.0"
   }
 }

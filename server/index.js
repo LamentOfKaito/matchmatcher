@@ -4,17 +4,17 @@ import LolprosService from './services/LolprosService.js';
 import * as dotenv from 'dotenv'
 import fs from 'fs'
 
-const LOL_MATCHES_COLL      = 'lol_matches';
-const LOLPROS_PROFILES_COLL = 'lolpros_profiles';
-const LOLPROS_SEARCHES_COLL = 'lolpros_searches';
+export const LOL_MATCHES_COLL      = 'lol_matches';
+export const LOLPROS_PROFILES_COLL = 'lolpros_profiles';
+export const LOLPROS_SEARCHES_COLL = 'lolpros_searches';
 
 dotenv.config();
-const riotApi    = process.env.MATCHMACHER_RIOT_API;
+const riotApi    = process.env.MATCHMATCHER_RIOT_API;
 const mongodbUri = process.env.MATCHMATCHER_MONGODB_URI || DEFAULT_LOCAL_URI;
 
-const riotService = new RiotService({riotApi});
-const mongoService = new MongoService({uri: mongodbUri});
-const lolprosService = new LolprosService();
+export const riotService = new RiotService({riotApi});
+export const mongoService = new MongoService({uri: mongodbUri});
+export const lolprosService = new LolprosService();
 
 const principal = {
     region: 'euw',
@@ -105,7 +105,6 @@ async function getUniqueSummonerNames() {
         });
     
     console.log(`There are ${uniqueSummonerNames.size} uniqueSummonerNames`);
-    fs.writeFileSync('result.json', JSON.stringify([...uniqueSummonerNames], null, 2));
     
     return uniqueSummonerNames;
 }
@@ -118,10 +117,6 @@ async function fetchLolpros() {
      */
     const summonerNameLolprosMap = {};
     
-    const searchRes = await lolprosService.search('month of rainnn')
-    const byRes = await lolprosService.getBySummonerName('euw', 'month of rainnn')
-    fs.writeFileSync('result.json', JSON.stringify({searchRes, byRes}, null, 2));
-
     let slug = null;
     for (const summonerName of uniqueSummonerNames) {
         if (await mongoService.existsAny(LOLPROS_SEARCHES_COLL, {summonerName})) {
@@ -144,5 +139,3 @@ async function fetchLolpros() {
         summonerNameLolprosMap[summonerName] = slug;
     }
 }
-
-fetchLolpros();

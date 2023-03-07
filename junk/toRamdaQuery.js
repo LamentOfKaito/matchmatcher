@@ -10,19 +10,6 @@ function lensParticipant(pIndex, ...restPath) {
 
 
 /**
- * @param {object} Participant.
- * @returns {Array<number>}
- */
-function getItemsArray(participant) {
-    const LENGTH = 7;
-    const arr = new Array(LENGTH);
-    for (let i = 0; i < LENGTH; i++) {
-        arr[i] = participant[`item${i}`]
-    }
-    return arr;
-}
-
-/**
  * @returns {function} a Ramda `where` function
  */
 function kaiToRamdaSpec(kaiSpec) {
