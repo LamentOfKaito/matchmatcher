@@ -2,7 +2,6 @@ import RiotService from './services/RiotService.js'
 import MongoService, {DEFAULT_LOCAL_URI} from './services/MongoService.js'
 import LolprosService from './services/LolprosService.js';
 import * as dotenv from 'dotenv'
-import fs from 'fs'
 
 export const LOL_MATCHES_COLL      = 'lol_matches';
 export const LOLPROS_PROFILES_COLL = 'lolpros_profiles';

@@ -1,10 +1,12 @@
+import * as R from 'ramda'
+
 /**
  * @see https://github.com/ramda/ramda/issues/1914 
  */
 const isSubset = R.curry((subset, set) => R.equals(R.intersection(subset, set), subset));
 
 
-function lensParticipant(pIndex, ...restPath) {
+export function lensParticipant(pIndex, ...restPath) {
   return R.lensPath(['participants', pIndex, ...restPath])
 }
 
@@ -12,11 +14,11 @@ function lensParticipant(pIndex, ...restPath) {
 /**
  * @returns {function} a Ramda `where` function
  */
-function kaiToRamdaSpec(kaiSpec) {
+export function kaiToRamdaSpec(kaiSpec) {
     const k = kaiSpec;
 
     return R.where({
-        summonerName: equal(k.summonerName),
+        summonerName: R.equals(k.summonerName),
         items: isSubset(k.items)
     });
 }

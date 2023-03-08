@@ -13,7 +13,6 @@ export async function getLightDdragon() {
     const lightChampions = Object
         .entries(minimalChampions.data)
         .map(([k, champ]) => {
-            console.log({k})
             return {
                 id: Number(champ.key),
                 slug: champ.id,
