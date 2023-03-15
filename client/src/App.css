@@ -1,3 +1,33 @@
+body {
+  margin: 5px;
+}
+
+header {
+  text-align: center;
+}
+
+h1 {
+  color: purple;
+}
+
+.principal {
+  color: gray;
+  font-weight: bold;
+  background: #efefef;
+  display: inline;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: large;
+}
+
+.principal__name {
+  color: black;
+}
+
+.principal__region {
+  text-transform: uppercase;
+}
+
 ol.allies {
   background: lightgreen;
   list-style: none;
@@ -14,27 +44,27 @@ div:has(> .enemies) {
 }
 
 
-div:has(> img) {
+.TriAvatar {
   background: gainsboro;
+  display: inline-block;
 }
-
-img {
+.TriAvatar img {
   display: inline-block;
   width: 50px;
   height: 50px;    
   border-radius: 100%;
 }
-img.principal-champion {
+.TriAvatar .principal-champion {
   background: gray;
   width: 50px;
   height: 50px;    
 }
-img.principal-role {
+.TriAvatar .principal-role {
   background: black;
   width: 25px;
   height: 25px;
 }
-img.principal-opponent {
+.TriAvatar .principal-opponent {
   background: gray;    
   width: 50px;
   height: 50px;    
@@ -63,4 +93,19 @@ img.principal-opponent {
   margin: 5px;
   display: flex;
   align-items: flex-start;
+}
+
+.line {
+  display: flex;
+  justify-content: flex-start;
+}
+.line .role {
+  width: 3em;
+  text-overflow: ellipsis;
+  overflow-x: clip;
+  color: darkslategray;
+}
+.line .champion {
+  width: 1em;
+  height: 1em;
 }

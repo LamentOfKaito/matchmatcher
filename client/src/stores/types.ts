@@ -3,7 +3,7 @@
  * Return latest data.
  */
 
-interface LightDdragonData {
+export interface LightDdragonData {
     version: string,
     champions: Array<LightChampion>,
     items: Array<LightItem>,

@@ -12,27 +12,14 @@
 "Use Mongodb queries in JavaScript"
 #interesting
 
+- https://www.npmjs.com/package/bottleneck
+#interesting
 
 ## Data organization
 There are 3 data stores:
 - **MatchSpec**
 - **LightMatches**
-- **LightDataDragon**
-```ts
-interface ILightData {
-
-    champions: {
-        name: string,
-        id: number,
-    }[],
-
-    items: {
-        name: string,
-        id: number,
-    }[]
-
-}
-```
+- **LightDdragon**
 
 ---
 

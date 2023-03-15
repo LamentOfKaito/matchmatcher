@@ -1,5 +1,11 @@
 import { LOL_MATCHES_COLL, mongoService } from './index.js';
 
+/**
+ * @typedef {import('@fightmegg/riot-api').RiotAPITypes.MatchV5.MatchDTO} RiotMatch
+ * 
+ * @typedef {ReturnType<makeLightMatch>} LightMatch
+ */
+
 export async function getLightMatches(region, summonerName) {
     const platformId = regionToPlatformId(region);
     const query = {
@@ -32,6 +38,13 @@ function regionToPlatformId(region) {
     }[region];
 }
 
+
+/**
+ * @todo Rename to `toLightMatch`?
+ * 
+ * @param {RiotMatch} match
+ * @returns `LightMatch`
+ */
 function makeLightMatch(match) {
     const {info} = match;
     const result = {
@@ -40,14 +53,13 @@ function makeLightMatch(match) {
         participants: info.participants.map(p => {
             return {
                 summonerName: p.summonerName,
-                //championName: p.championName,
                 championId: p.championId,
                 teamId: p.teamId,
 
-                // NOTE: `teamPosition` is the only useful prop, right?
-                teamPosition: p.teamPosition,
+                role: p.teamPosition,
 
                 items: makeItemsArray(p),
+
                 // first tower Takedown
                 firstTower: p.firstTowerKill || p.firstTowerAssist,
             }

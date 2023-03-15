@@ -1,32 +1,42 @@
 import * as R from 'ramda'
 import { create } from 'zustand'
 
-//@ts-ignore
+import { NAME_DOMAINS } from './common.ts';
+
 import {lensParticipant} from './toRamdaQuery.ts';
 
-export interface IMatchSpecState {
+export interface IMatchSpec {
     enforceTeamIds: boolean,
-    participants: Array<ParticipantSpec>
+    participants: Array<ParticipantSpec>,
 }
 
 interface ParticipantSpec {
     idx: number,
-    teamId: number,
     nickname: string,
-    championName: string,
-    roleName: string,
+    teamId: number,
+    championId: string,
+    role: string,
+    items: number[],
 
     nameDomain: string,
     nameValue: string,
 
     hasLolpros: boolean,
     hasFirstTower: boolean,
-    items: number[],
 
 }
 
+
+/**
+ * 
+ * @remark
+ * - About `xSelected: []` attributes:
+ * BaseWeb requires that Select values are arrays even if we can only select one item at a time.
+ * 
+ * @returns {IMatchSpec}
+ */
 function getInitState() {
-    let participants = [];
+    const participants: ParticipantSpec[] = [];
 
     for (const prefix of ['Ally', 'Enemy']) {
         for (let i = 1; i <= 5; i++) {
@@ -35,13 +45,20 @@ function getInitState() {
                 nickname: `${prefix} ${i}`,
 
                 teamId: prefix === 'Ally' ? 100 : 200,
-                championName: '',
-                roleName: '',
 
-                nameDomain: 'Summoner name',
+                championId: -1,
+                championSelected: [],
+                
+                role: '',
+                roleSelected: [],
+
                 nameValue: '',
+                nameDomain: NAME_DOMAINS[0],
+                nameDomainSelected: [ NAME_DOMAINS[0] ],
 
                 items: [],
+                itemsSelected: [],
+
                 hasLolpros: false,
                 hasFirstTower: false,
             }
@@ -56,37 +73,37 @@ function getInitState() {
 
 }
 
-const useSpecStore = create<IMatchSpecState>((set, get) => ({
+const useSpecStore = create<IMatchSpec>((set, get) => ({
     ...getInitState(),
 
     /**
-     * 
      * @param {boolean} enforceTeamIds 
-     * @returns 
      */
     setEnforceTeamIds: (enforceTeamIds) => set({enforceTeamIds}),
 
     /**
-     * @param {string} championName
+     * @param {number} championId
      */
-    unsetChampion: (championName) => {
+    unsetChampion: (championId) => {
         const state = get();
-        const i = state.participants.findIndex(p => p.championName === championName);
+        const i = state.participants.findIndex(p => p.championId === championId);
         if (i !== -1) {
-            const updated = R.set(lensParticipant(i, 'championName'), '', state);
+            const updated = R.set(lensParticipant(i, 'championId'), -1, state);
+            //R.set(lensParticipant(i, 'championSelected'), [], state);
             set(updated);
         }
     },
 
     /**
      * @param {number} teamId
-     * @param {string} roleName
+     * @param {string} role
      */
-    unsetRole: (teamId, roleName) => {
+    unsetRole: (teamId, role) => {
         const state = get();
-        const i = state.participants.findIndex(p => p.teamId === teamId && p.roleName === roleName);
+        const i = state.participants.findIndex(p => p.teamId === teamId && p.role === role);
         if (i !== -1) {
-            const updated = R.set(lensParticipant(i, 'roleName'), roleName, state)
+            const updated = R.set(lensParticipant(i, 'role'), role, state);
+            //R.set(lensParticipant(i, 'roleSelected'), [], state);
             set(updated);
         }
     },

@@ -2,16 +2,13 @@ import { create } from 'zustand'
 
 export interface MatchesStore {
     status: 'LOADING' | 'LOADED',
-    metadata: {
+    metadata?: {
         size?: number
     },
-    data: {
-        lastUpdated
-        matches
-    }
+    matches: Array<object>
 }
 
-const useSpecStore = create((set, get) => ({
+const useMatchesStore = create<MatchesStore>((set, get) => ({
     status: 'LOADING',
     matches: [],
 
@@ -19,4 +16,4 @@ const useSpecStore = create((set, get) => ({
     setMatches: (matches) => set({matches})
 }));
 
-export default useSpecStore;
+export default useMatchesStore;

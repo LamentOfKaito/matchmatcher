@@ -1,15 +1,16 @@
 /**
- * @returns Size of the resource in bytes (content-length).
+ * @param {string} url
+ * @param {import('node-fetch').RequestInit} options
+ * @returns {Promise<number>} Size of the resource in bytes (content-length).
  */
-async function getSize(url) {
-    return await axios
-        .head(url)
-        .then(res => res.headers['content-length'])
+async function getSize(url, options = {}) {
+    return await fetch(url, {...options, method: 'HEAD'})
+        .then(res => res.headers.get('content-length'))
         .then(Number);
 }
 
 function prettyFilesize(bytes) {
-    throw 'unimplemented exception';
+    throw new Error('Unimplemented exception');
 }
 
 useEffect(async function fetchDataSize() {
@@ -27,7 +28,7 @@ const sizeText = dataSize ? prettyFilesize(size) : 'unknown size';
 
 async function getAny(url, onProgress = function() {}) {
     const res = await axios({
-        url: sUrl,
+        url,
         method: 'GET',
         responseType: 'blob', // important
         onDownloadProgress: (progressEvent) => {

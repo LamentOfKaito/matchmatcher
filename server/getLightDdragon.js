@@ -3,6 +3,8 @@
  * 
  * @todo Move to RiotService?
  * @todo Remove either `slug` or `name` from `LightChampion`?
+ * 
+ * @returns LightDdragonData
  */
 export async function getLightDdragon() {
     const [versions] = await kaiFetch('https://ddragon.leagueoflegends.com/api/versions.json');

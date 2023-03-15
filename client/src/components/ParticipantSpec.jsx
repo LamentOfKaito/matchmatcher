@@ -1,88 +1,68 @@
 import * as React from 'react';
 
-import {Checkbox, STYLE_TYPE} from 'baseui/checkbox';
+import { Checkbox, STYLE_TYPE } from 'baseui/checkbox';
 import { Select } from "baseui/select";
 import { StatefulPopover } from "baseui/popover";
 import { Input } from "baseui/input";
 import { Button, KIND, SIZE, SHAPE } from "baseui/button";
-import {Block} from 'baseui/block';
+import { Block } from 'baseui/block';
 import { Overflow } from 'baseui/icon';
 
+import { NAME_DOMAINS, ROLE_OPTIONS } from '../stores/common.ts';
 import useMatchSpecStore from '../stores/MatchSpecStore.ts'
+import useDdragonStore from '../stores/DdragonStore.ts'
 
 export default function ParticipantSpec({participant}) {
     const p = useMatchSpecStore(state => state.participants.find(p => p.idx === participant.idx));
     const [setProp, unsetChampion, unsetRole] = useMatchSpecStore(state => [state.setProp, state.unsetChampion, state.unsetRole]);
+
     const setSome = (propName, val) => setProp(propName, p.idx, val);
+    // setProp(`${propName}Selected`, val)
+    const setSelected = (propName, val) => setProp(`${propName}Selected`, p.idx, val);
 
-    const NAME_DOMAINS = [
-        {
-            id: 'SUMMONER_NAME', label: 'Summoner name', icon: 'riot', allowEmptyValue: false,
-        },
-        {
-            id: 'LOLPROS', label: 'Lolpros', icon: 'lolpros', allowEmptyValue: true
-        },
-        {
-            id: 'TWITCH', label: 'Twitch', icon: 'twitch', allowEmptyValue: true
-        },
-    ];
+    const [lightChampions, lightItems] = useDdragonStore(state => [state.champions, state.items]);
 
-    const ROLE_OPTIONS = [
-        {label: 'Any', id: '*'},
-        {label: 'Top', id: 'TOP'},
-        {label: 'Jungle', id: 'JUNGLE'},
-        {label: 'Middle', id: 'MIDDLE'},
-        {label: 'Bottom', id: 'BOTTOM'},
-        {label: 'Support', id: 'UTILITY'}   
-    ];
-
-    const CHAMPION_OPTIONS = [
-        {label: 'Aatrox', id: 1},
-        {label: 'Quinn', id: 2},
-    ];
-
-    const ITEM_OPTIONS = [
-        {label: 'Everfrost', id: 1},
-        {label: 'Eclipse', id: 2},
-    ];
 
     return (
-    <div className='participant'>
-        {p.nickname}
+    <div className='participant' title={p.nickname}>
         <Select
-            options={ROLE_OPTIONS}
-            value={p.roleName}
             placeholder="Select role"
+            options={ROLE_OPTIONS}
+            value={p.roleSelected}
+            size={SIZE.mini}
             onChange={params => {
-                unsetRole(p.teamId, p.roleName);
-                setSome('roleName', params.value);
+                unsetRole(p.teamId, p.role);
+                setSelected('role', params.value);
                 }}
             />
 
         <Select
-            options={CHAMPION_OPTIONS}
-            value={p.championName}
             placeholder="Select champion"
+            options={lightChampions}
+            labelKey='name'
+            size={SIZE.mini}
+            value={p.championSelected}
             onChange={params => {
-                unsetChampion(p.championName);
-                setSome('championName', params.value);
+                unsetChampion(p.champion);
+                setSelected('champion', params.value);
             }}
         />
         
-    <div>
+    <div style={{display: 'flex'}}>
         <Select
             placeholder="Name domain"
             options={NAME_DOMAINS}
-            value={p.nameDomain}
+            value={p.nameDomainSelected}
+            size={SIZE.mini}
             onChange={params => {
-                setSome('nameDomain', params.value);
+                setSelected('nameDomain', params.value);
             }}
         />
         <Input
             placeholder="Name value"
             value={p.nameValue}
             onChange={params => {
-                setSome('nameValue', params.value);
+                setSelected('nameValue', params.value);
             }}
             />
     </div>
@@ -110,11 +90,13 @@ export default function ParticipantSpec({participant}) {
 
             Has items:
                 <Select
-                    options={ITEM_OPTIONS}
-                    value={p.items}
+                    options={lightItems}
+                    labelKey='name'
+                    value={p.itemsSelected}
                     multi
                     placeholder="Select items"
-                    onChange={params => setSome('items', params.value)}
+                    size={SIZE.mini}
+                    onChange={params => setSelected('items', params.value)}
                     />
         </Block>
       )}
