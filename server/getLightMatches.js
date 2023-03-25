@@ -60,7 +60,7 @@ function makeLightMatch(match) {
 
                 items: makeItemsArray(p),
 
-                // first tower Takedown
+                // first tower takedown
                 firstTower: p.firstTowerKill || p.firstTowerAssist,
             }
         }),

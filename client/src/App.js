@@ -1,26 +1,26 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import './App.css';
-import useDdragonStore from './stores/DdragonStore.ts';
 
+import {Loader} from './components/index.ts';
 import MatchSpec from './components/MatchSpec.jsx';
 import MatchesStats from './components/MatchesStats.jsx';
 import MatchesList from './components/MatchesList.jsx';
 
+import useDdragonStore from './stores/DdragonStore.ts';
 import useMatchSpecStore from './stores/MatchSpecStore.ts'
 import {toRamdaQuery, tidyMatchSpec} from './stores/toRamdaQuery.ts'
+import { getSize } from './utils.js';
 
 function App() {
   const [principal] = useState({region: 'euw', summonerName: 'Slogdog White'});
-  const setDdragonData = useDdragonStore(state => state.setData);
-  const [ddragonLoaded, setDdragonLoaded] = useState(false);
+  const [progress, setProgress] = useState({ddragonLoaded: false, matchesLoaded: false, ddragonSize: -1, matchesSize: -1});
   const [matches, setMatches] = useState([]);
-  const [matchesLoaded, setMatchesLoaded] = useState(false);
-
+  const setDdragonData = useDdragonStore(state => state.setData);
   const matchSpecState = useMatchSpecStore(state => state);
 
   const filteredMatches = useMemo(function(){
-    console.log('Filtering...');
+    //console.log('Filtering...');
     const fn = toRamdaQuery(tidyMatchSpec(matchSpecState));
     return matches.filter(m => {
       const passed = fn(m);
@@ -32,19 +32,26 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const BASE = 'http://localhost:3000';
-      const lightDataUrl = `${BASE}/light-data`;
-      const matchesUrl = `${BASE}/light-matches/${principal.region}/${principal.summonerName}`;
+      //const BASE = 'http://matchmatcher.vercel.app';
+      //const lightDataUrl = `${BASE}/light-data`;
+      //const matchesUrl = `${BASE}/light-matches/${principal.region}/${principal.summonerName}`;
   
-      setDdragonData(await fetch(lightDataUrl).then(res => res.json()));
-      setDdragonLoaded(true);
-      
+      const ddragonUrl = './light-ddragon.json';
+      const matchesUrl = './light-matches.json';
+      const ddragonSize = await getSize(ddragonUrl);
+      const matchesSize = await getSize(matchesUrl);
+      setProgress(prev => ({...prev, ddragonSize, matchesSize}));
+
+      const ddragonData = await fetch(ddragonUrl).then(res => res.json());
+      setDdragonData(ddragonData);
+      setProgress(prev => ({...prev, ddragonLoaded: true}));
+            
       const matches = await fetch(matchesUrl).then(res => res.json());
-      setMatches(matches/*.slice(0, 2)*/);
-      setMatchesLoaded(true);
+      setMatches(matches/*.slice(0, 3)*/);
+      setProgress(prev => ({...prev, matchesLoaded: true}));
     }
     fetchData();
-  }, [principal]);
+  }, []);
 
   return (
     <>
@@ -60,7 +67,7 @@ function App() {
 
       <MatchSpec />
       
-      {(!ddragonLoaded || !matchesLoaded) ? 'Loading...' :
+      {(!progress.ddragonLoaded || !progress.matchesLoaded) ? <Loader progress={progress} /> :
       <div>
         <MatchesStats matches={filteredMatches} principal={principal} />
         <MatchesList matches={filteredMatches} principal={principal} />

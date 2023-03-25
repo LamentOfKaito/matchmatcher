@@ -5,9 +5,20 @@ import {toTeamColor} from '../stores/common.ts'
 import {championSquareImg} from '../stores/DdragonStore.ts'
 
 /**
+ * ParticipantLine component.
+ */
+function Line({participant}) {
+    const p = participant;
+    return <li className='line'>
+            <span className='role'>{p.role}</span>
+            <img alt={`Champion ID ${p.championId}`} className='champion' src={championSquareImg({id: p.championId})} />
+            <span>{p.summonerName}</span>
+    </li>
+}
+
+/**
  * Inspired by Mobalytics.gg's summary component.
  * 
- * @todo Create ParticipantLine component.
  * @todo Create TriAvatar component.
  */
 export default React.memo(function KaiMatchSummary({match, principal}) {
@@ -36,26 +47,14 @@ export default React.memo(function KaiMatchSummary({match, principal}) {
             />
         </div>
 
-        Badges:
-            <a href={leagueofgraphsLink}>League of Graphs</a>
-            <i>{sideName} side</i>
+        <div className='summary__badges'>
+            <a className='badge' href={leagueofgraphsLink}>League of Graphs</a>
+            <i className='badge'>{sideName} side</i>
+        </div>
         
-        Participants:
-        <div>
-            <ol className='allies'>
-                {allies.map((p, i) => <li className='line' key={i}>
-                    <span className='role'>{p.role}</span>
-                    <img className='champion' src={championSquareImg({id: p.championId})} />
-                    <span>{p.summonerName}</span>
-                </li>)}
-            </ol>
-            <ol className='enemies'>
-                {enemies.map((p, i) => <li className='line' key={i}>
-                    <span className='role'>{p.role}</span>
-                    <img className='champion' src={championSquareImg({id: p.championId})} />
-                    <span>{p.summonerName}</span>
-                </li>)}
-            </ol>
+        <div className='summary__participants'>
+            <ol className='allies'>{allies.map((p, i) => <Line key={i} participant={p} />)}</ol>
+            <ol className='enemies'>{enemies.map((p, i) => <Line key={i} participant={p} />)}</ol>
         </div>
     </article>)
 

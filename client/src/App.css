@@ -1,5 +1,11 @@
 body {
   margin: 5px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+ul,
+ol {
+  list-style: none;
 }
 
 header {
@@ -9,6 +15,7 @@ header {
 h1 {
   color: purple;
 }
+
 
 .principal {
   color: gray;
@@ -28,12 +35,12 @@ h1 {
   text-transform: uppercase;
 }
 
-ol.allies {
+.summary .allies {
   background: lightgreen;
   list-style: none;
 }
 
-ol.enemies {
+.summary .enemies {
   background: lightpink;
   list-style: none;
 }
@@ -43,31 +50,34 @@ div:has(> .enemies) {
   display: flex;
 }
 
-
 .TriAvatar {
   background: gainsboro;
   display: inline-block;
 }
+
 .TriAvatar img {
   display: inline-block;
   width: 50px;
-  height: 50px;    
+  height: 50px;
   border-radius: 100%;
 }
+
 .TriAvatar .principal-champion {
   background: gray;
   width: 50px;
-  height: 50px;    
+  height: 50px;
 }
+
 .TriAvatar .principal-role {
   background: black;
   width: 25px;
   height: 25px;
 }
+
 .TriAvatar .principal-opponent {
-  background: gray;    
+  background: gray;
   width: 50px;
-  height: 50px;    
+  height: 50px;
 }
 
 
@@ -84,6 +94,7 @@ div:has(> .enemies) {
 .team.--red {
   border-color: lightpink;
 }
+
 .team.--blue {
   border-color: lightblue;
 }
@@ -99,13 +110,50 @@ div:has(> .enemies) {
   display: flex;
   justify-content: flex-start;
 }
+
 .line .role {
   width: 3em;
   text-overflow: ellipsis;
   overflow-x: clip;
   color: darkslategray;
 }
+
 .line .champion {
   width: 1em;
   height: 1em;
+}
+
+.summary {
+  background: #efefef;
+  margin-bottom: 5px;
+  display: grid;
+  grid-template-areas:
+    "b b b"
+    "t p p"
+    "t p p";
+}
+
+.TriAvatar {
+  grid-area: t;
+}
+
+.summary__badges {
+  grid-area: b;
+}
+
+.summary__participants {
+  grid-area: p;
+}
+
+.badge {
+  border: 2px solid #8080808a;
+  border-radius: 5px;
+  padding: 0 3px;
+  margin: 0 3px;
+  font-style: normal;
+}
+
+a.badge {
+  background: #dbb7db;
+  color: purple;
 }

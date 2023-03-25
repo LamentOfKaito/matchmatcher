@@ -1,14 +1,15 @@
+import * as dotenv from 'dotenv'
+
 import RiotService from './services/RiotService.js'
 import MongoService, {DEFAULT_LOCAL_URI} from './services/MongoService.js'
 import LolprosService from './services/LolprosService.js';
-import * as dotenv from 'dotenv'
 
 export const LOL_MATCHES_COLL      = 'lol_matches';
 export const LOLPROS_PROFILES_COLL = 'lolpros_profiles';
 export const LOLPROS_SEARCHES_COLL = 'lolpros_searches';
 
 dotenv.config();
-const riotApi    = process.env.MATCHMATCHER_RIOT_API;
+const riotApi    = process.env.MATCHMATCHER_RIOT_API || 'NONE';
 const mongodbUri = process.env.MATCHMATCHER_MONGODB_URI || DEFAULT_LOCAL_URI;
 
 export const riotService = new RiotService({riotApi});

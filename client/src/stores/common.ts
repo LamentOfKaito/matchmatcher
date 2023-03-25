@@ -12,10 +12,13 @@ export const ROLE_OPTIONS = [
     {label: 'Support', id: 'UTILITY'}   
 ];
 
+/**
+ * Sorted.
+ */
 export const TEAM_POSITIONS = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY'];
 
 export const TEAM_IDS = [100, 200];
-const TEAM_COLORS = ['blue', 'red'];
+export const TEAM_COLORS = ['blue', 'red'];
 /**
  * @param {number} teamId 
  * @returns {string}
