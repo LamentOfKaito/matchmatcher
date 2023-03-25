@@ -5,68 +5,59 @@
  * @todo Create isTeam predicate
  * @todo Maybe differentiate between participants 
  * 
- * @param {MatchSpecData} matchSpecData
+ * @param {MatchSpecData} matchSpec
  * @returns {object} Mongo query
  */
-function toMongoQuery(matchSpecData) {
+function toMongoQuery(matchSpec) {
     const finalQuery = 
     {
-        $and: participants.map(participantPartialQuery)
-    }
-
-    if (!enforceTeamIds) {
-        uniqueP = findUniqueParticipant(matchSpecData)
-        $$teamX = uniqueP.teamId
-        
-        groupBy(teamId)
+        $all: matchSpec.participants.map(participantQuery).map(obj => {
+            return {
+                $elemMatch: obj
+            }
+        })
     }
 
     return finalQuery;
 }
 
-function participantPartialQuery(someCentalizedData) {
+function participantQuery(participantSpec) {
+    const p = participantSpec;
+    
     let obj = {
         $or: []
     }
 
-    if (enforceTeamIds) {
-        obj.teamId = teamId;
+    if (p.teamId) {
+        obj.teamId = p.teamId;
     }
 
-    if (championName) {
-        championId = championsMap.get(championName);
-        obj.championId = championId;
+    if (p.championId) {
+        obj.championId = p.championId;
     }
     
-    if (role) {
-        obj.teamPosition = role;
+    if (p.role) {
+        obj.teamPosition = p.role;
     }
 
-    if (nameDomain === 'SUMMONER_NAME' && nameValue) {
-        obj.summonerName = nameValue;
+    if (p.nameDomain === 'SUMMONER_NAME' && p.nameValue) {
+        obj.summonerName = p.nameValue;
     }
 
-    if (nameDomain === 'LOLPROS') {
+    if (p.nameDomain === 'LOLPROS') {
         obj.lolpros = {$nnull: true};
-        if (nameValue) {
-            obj.lolpros = nameValue;
-        }
-    }
-
-    if (nameDomain === 'TWITCH') {
-        obj.twitch = {$nnull: true};
-        if (nameValue) {
-            obj.twitch = nameValue;
+        if (p.nameValue) {
+            obj.lolpros = p.nameValue;
         }
     }
 
     // Extra
     
-    if (isFirstblood) {
+    if (p.isFirstblood) {
         obj.firstBloodKill = true
     }
     
-    if (isFirstTurret) {
+    if (p.isFirstTurret) {
         obj.$or.push({firstTurretKill: true});
         obj.$or.push({firstTurretAssist: true});
     }
